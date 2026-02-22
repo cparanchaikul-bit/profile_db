@@ -1,16 +1,9 @@
 <template>
   <div>
-    <!-- menu
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/Contact">Contact</router-link>
-    </nav>
-    -->
-
     <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div class="container">
-        <a class="navbar-brand" href="/">Navbar</a>
+        <a class="navbar-brand" href="/">ร้านขายของ</a>
+        
         <button
           class="navbar-toggler"
           type="button"
@@ -22,110 +15,66 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
+              <router-link class="nav-link" to="/">Home</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/student_crud">Student_crud</a>
+              <router-link class="nav-link" to="/product">Product</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/Contact">Contact</a>
+              <router-link class="nav-link" to="/Contact">Contact</router-link>
             </li>
 
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >Employees</a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="/employees">Employees</a>
-                </li>
+            <template v-if="isLoggedIn">
+             
 
-                <li>
-                  <a class="dropdown-item" href="/employees_crud">Employees_crud</a>
-                </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Employees</a>
+                <ul class="dropdown-menu">
+                  <li><router-link class="dropdown-item" to="/employees">Employees</router-link></li>
+                  <li><router-link class="dropdown-item" to="/employees_crud">Employees_crud</router-link></li>
+                  <li><router-link class="dropdown-item" to="/employee_crud_image">Employees crud Image</router-link></li>
+                </ul>
+              </li>
 
-                <li>
-                  <a class="dropdown-item" href="/employee_crud_image">Employees crud Image</a>
-                </li>
-              </ul>
-            </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Customer</a>
+                <ul class="dropdown-menu">
+                  <li><router-link class="dropdown-item" to="/Customer">Customer</router-link></li>
+                  <li><router-link class="dropdown-item" to="/customer_crud">Customer_crud</router-link></li>
+                </ul>
+              </li>
 
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >Customer</a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="/Customer">Customer</a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="/customer_crud">Customer_crud</a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >Product</a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="/product">product</a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="/show_product">Show_product</a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="/product_crud">Product Crud</a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="/product_api">Product_api</a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >Type</a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="/type">Type</a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="/Type_crud">Type_crud</a>
-                </li>
-              </ul>
-            </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Type</a>
+                <ul class="dropdown-menu">
+                  <li><router-link class="dropdown-item" to="/type">Type</router-link></li>
+                  <li><router-link class="dropdown-item" to="/type_crud">Type_crud</router-link></li>
+                </ul>
+              </li>
+              
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Product Admin</a>
+                <ul class="dropdown-menu">
+                  <li><router-link class="dropdown-item" to="/show_product">Show_product</router-link></li>
+                  <li><router-link class="dropdown-item" to="/product_crud">Product Crud</router-link></li>
+                  <li><router-link class="dropdown-item" to="/product_api">Product_api</router-link></li>
+                </ul>
+              </li>
+            </template>
           </ul>
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
+
+          <div class="d-flex align-items-center">
+            <span v-if="isLoggedIn" class="me-3 text-light">
+              👤 <span class="badge bg-success">{{ userName }}</span>
+            </span>
+
+            <router-link v-if="!isLoggedIn" to="/login" class="btn btn-primary">Login</router-link>
+            <button v-if="isLoggedIn" @click="logout" class="btn btn-danger ms-2">Logout</button>
+          </div>
         </div>
       </div>
     </nav>
@@ -134,24 +83,39 @@
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+<script>
+export default {
+  data() {
+    return {
+      isLoggedIn: false,
+      userName: ""
+    }
+  },
+  mounted() {
+    this.checkLogin()
+  },
+  methods: {
+    checkLogin() {
+      // ตรวจสอบสถานะจาก localStorage
+      this.isLoggedIn = !!localStorage.getItem("adminLogin")
+      if (this.isLoggedIn) {
+        const user = JSON.parse(localStorage.getItem("user"))
+        this.userName = user?.name || "Admin"
+      }
+    },
+    logout() {
+      localStorage.removeItem("adminLogin")
+      localStorage.removeItem("user")
+      this.isLoggedIn = false
+      this.userName = ""
+      this.$router.push("/login")
+    }
+  },
+  watch: {
+    // เมื่อเปลี่ยน URL ให้เช็คสถานะใหม่ทุกครั้ง
+    '$route'() {
+      this.checkLogin()
+    }
+  }
 }
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #251c9e;
-}
-</style>
+</script>
