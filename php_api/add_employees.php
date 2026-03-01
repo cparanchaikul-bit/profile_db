@@ -1,44 +1,17 @@
 <?php
-
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 include 'condb.php';
 
-$data = json_decode(file_get_contents("php://input"), true);
-
-if (
-    !isset($data['full_name']) ||
-    !isset($data['department']) ||
-    !isset($data['salary']) ||
-    !isset($data['active'])
-) {
-    echo json_encode([
-        "success" => false,
-        "message" => "ข้อมูลไม่ครบ"
-    ]);
-    exit;
+$image = "";
+if (isset($_FILES['image'])) {
+    $image = "uploads/" . time() . "_" . $_FILES['image']['name'];
+    move_uploaded_file($_FILES['image']['tmp_name'], $image);
 }
 
-try {
-    $sql = "INSERT INTO employees
-            (full_name, department, salary, active)
-            VALUES
-            (:full_name, :department, :salary, :active)";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([
-        ':full_name' => $data['full_name'],
-        ':department'  => $data['department'],
-        ':salary'     => $data['salary'],
-        ':active'  => $data['active']
-    ]);
-
-    echo json_encode([
-        "success" => true,
-        "message" => "เพิ่มข้อมูลเรียบร้อย"
-    ]);
-
-} catch (PDOException $e) {
-    echo json_encode([
-        "success" => false,
-        "message" => $e->getMessage()
-    ]);
-}
+$sql = "INSERT INTO employees (first_name, last_name, address, phone, image) VALUES (?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$res = $stmt->execute([$_POST['first_name'], $_POST['last_name'], $_POST['address'], $_POST['phone'], $image]);
+echo json_encode(["success" => $res]);
+?>
